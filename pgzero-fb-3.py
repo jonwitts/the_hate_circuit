@@ -1,11 +1,11 @@
 import os
-import time
 
 x = 0
 y = 0
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
+import time
 from random import uniform
 from socialapis import Facebook
 from unidecode import unidecode

@@ -19,9 +19,11 @@ HEIGHT = 1080
 # Interval in seconds between API calls
 FETCH_INTERVAL = 60
 
-# State variables to store sentiment image, raw score, and timing
+# State variables to store sentiment image, initial sentiment, raw score, and timing
 current_image = 'hate-circuit-bg'
 current_sentiment = 0.0
+love_score = 0
+hate_score = 0
 last_fetch_time = 0
 
 def fb_post_sentiment(debug=False):
@@ -67,15 +69,17 @@ def fb_post_sentiment(debug=False):
     return avg_sentiment
 
 def update_sentiment_data():
-    global current_image, current_sentiment
-    
+    global current_image, current_sentiment, love_score, hate_score
+
     current_sentiment = fb_post_sentiment(True)
 
     # Split the -1.0 to +1.0 range into thresholds
     if current_sentiment < 0:
         current_image = 'hate'
+        hate_score += 1
     elif current_sentiment > 0.05:
         current_image = 'love'
+        love_score += 1
     elif 0 <= current_sentiment <= 0.05:
         current_image = 'unsure'
     else:
@@ -84,7 +88,7 @@ def update_sentiment_data():
 def draw():
     screen.clear()
     screen.blit(current_image, (0, 0))
-    
+
     # Overlay sentiment score on top of the image
     sentiment_text = f"Sentiment Score: {current_sentiment:.3f}"
     screen.draw.text(
@@ -92,6 +96,26 @@ def draw():
         center=(WIDTH // 2, 80),
         fontsize=60,
         color="white",
+        shadow=(2, 2),
+        scolor="black"
+    )
+
+    # Overlay love and hate scores
+    love_text = f"Love: {love_score}"
+    hate_text = f"Hate: {hate_score}"
+    screen.draw.text(
+        love_text,
+        center=(WIDTH // 4, HEIGHT - 80),
+        fontsize=40,
+        color="green",
+        shadow=(2, 2),
+        scolor="black"
+    )
+    screen.draw.text(
+        hate_text,
+        center=(3 * WIDTH // 4, HEIGHT - 80),
+        fontsize=40,
+        color="red",
         shadow=(2, 2),
         scolor="black"
     )
@@ -107,7 +131,7 @@ def update():
     if current_time - last_fetch_time >= FETCH_INTERVAL:
         update_sentiment_data()
         last_fetch_time = current_time
-        
+
     if debug:
         print(f"Time to next fetch: {FETCH_INTERVAL - (current_time - last_fetch_time)}")
 

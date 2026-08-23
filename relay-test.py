@@ -3,6 +3,9 @@ import time
 
 def relay_trigger(relay_int, low_high, duration, debug = False):
     '''
+    wire positive between A and C on relay
+    A to power, C to device
+
     relay_int = 5, 6, 13, 16, 19, 20, 21, 26
     low_high = low OR high
     time = time in action in ms
@@ -10,7 +13,7 @@ def relay_trigger(relay_int, low_high, duration, debug = False):
     '''
 
     GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(True)
+    GPIO.setwarnings(False)
 
     Relay = [5, 6, 13, 16, 19, 20, 21, 26]
 
@@ -32,7 +35,7 @@ def relay_trigger(relay_int, low_high, duration, debug = False):
             time.sleep(duration)
         elif low_high == "high":
             if debug:
-                print("set relay to low")
+                print("set relay to high")
             GPIO.output(relay_int, GPIO.HIGH)
             time.sleep(duration)
 
@@ -40,23 +43,23 @@ def relay_trigger(relay_int, low_high, duration, debug = False):
         print("GPIO cleanup")
     GPIO.cleanup()
 
-relay_trigger(6, "low", 1, True)
-#time.sleep(2)
-relay_trigger(6, "high", 2, True)
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
+Relay = [5, 6, 13, 16, 19, 20, 21, 26]
 
-#print("enter try loop")
-#try:
-#    while True:
-#        print("set relays to low")
-#        for i in range(len(Relay)):
-#            GPIO.output(Relay[i], GPIO.LOW)
-#            time.sleep(0.5)
-#        print("set relays to high")
-#        for i in range(len(Relay)):
-#            GPIO.output(Relay[i], GPIO.HIGH)
-#            time.sleep(0.5)
+for i in range(len(Relay)):
+        GPIO.setup(Relay[i], GPIO.OUT)
+        GPIO.output(Relay[i], GPIO.HIGH)
 
-
-#except:
-#    GPIO.cleanup()
+while True:
+    key = input("Enter 1 to switch on, 0 to switch off and q to exit:\n")
+    if key == "1":
+        GPIO.output(5, GPIO.LOW)
+    elif key == "0":
+        GPIO.output(5, GPIO.HIGH)
+    elif key == "q":
+        GPIO.cleanup()
+        break
+    else:
+        print("Please enter 1 or 0")

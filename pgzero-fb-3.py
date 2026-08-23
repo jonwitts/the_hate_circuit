@@ -113,12 +113,12 @@ def update_sentiment_data():
         current_image = 'hate'
         hate_score += 1
         relay_trigger(5, "off")
-    elif current_sentiment > 0.05:
+    elif current_sentiment > 0.005:
         # set image to love, increment love score and switch on relay
         current_image = 'love'
         love_score += 1
         relay_trigger(5, "on")
-    elif 0 <= current_sentiment <= 0.05:
+    elif 0 <= current_sentiment <= 0.005:
         # set image to unsure, switch off relay
         current_image = 'unsure'
         relay_trigger(5, "off")
@@ -131,11 +131,11 @@ def draw():
     screen.blit(current_image, (0, 0))
 
     # Overlay sentiment score on top of the image
-    sentiment_text = f"Sentiment Score: {current_sentiment:.3f}"
+    sentiment_text = f"Current sentiment score: {current_sentiment:.3f}"
     screen.draw.text(
         sentiment_text,
         center=(WIDTH // 2, 80),
-        fontsize=60,
+        fontsize=70,
         color="white",
         shadow=(2, 2),
         scolor="black"
@@ -147,7 +147,7 @@ def draw():
     screen.draw.text(
         love_text,
         center=(WIDTH // 4, HEIGHT - 80),
-        fontsize=40,
+        fontsize=60,
         color="green",
         shadow=(2, 2),
         scolor="black"
@@ -155,7 +155,7 @@ def draw():
     screen.draw.text(
         hate_text,
         center=(3 * WIDTH // 4, HEIGHT - 80),
-        fontsize=40,
+        fontsize=60,
         color="red",
         shadow=(2, 2),
         scolor="black"
@@ -165,7 +165,7 @@ def draw():
 def update():
     global last_fetch_time
 
-    debug = True  # Set to True if you want to print fetch countdowns
+    debug = False  # Set to True if you want to print fetch countdowns
 
     current_time = time.time()
 

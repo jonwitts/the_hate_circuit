@@ -123,7 +123,7 @@ def draw():
 def update():
     global last_fetch_time
 
-    debug = False  # Set to True if you want to print fetch countdowns
+    debug = True  # Set to True if you want to print fetch countdowns
 
     current_time = time.time()
 

@@ -1,0 +1,10 @@
+[Unit]
+Description=The Hate Circuit
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/home/pi/Documents/hate-circuit/pgzero-fb.py
+
+[Install]
+WantedBy=multi-user.target

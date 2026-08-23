@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+
+# Force the Pygame window to open at a specific position on the screen
+from doctest import debug
 import os
 
 x = 0
@@ -11,6 +15,8 @@ from random import uniform
 from socialapis import Facebook
 from unidecode import unidecode
 from textblob import TextBlob
+# import the fb_api_token from the socialapis_auth.py file
+# not included in this repo for security reasons
 from socialapis_auth import fb_api_token
 
 # Match these dimensions to your display resolution
@@ -18,9 +24,9 @@ WIDTH = 1920
 HEIGHT = 1080
 
 # Interval in seconds between API calls
-FETCH_INTERVAL = 60
+FETCH_INTERVAL = 300 # 5 minutes
 
-# State variables to store sentiment image, initial sentiment, raw score, and timing
+# State variables to store sentiment image, initial sentiment, scores, and fetch time
 current_image = 'hate-circuit-bg'
 current_sentiment = 0.0
 love_score = 0
@@ -44,31 +50,34 @@ def fb_post_sentiment(debug=False):
     if not fb_info:
         return 0.0
 
+    # Empty list to store sentiment scores
     sentiment_list = []
 
+    # Loop through each post, clean the text, and calculate sentiment
     for entry in fb_info:
         raw_post = entry["basic_info"]["post_text"]
+        # Clean the post text by removing newlines and converting to ASCII
         clean_post = unidecode(raw_post.replace("\n", " "))
-
         if debug:
             print(clean_post)
             print("----------")
 
+        # Use TextBlob to calculate sentiment polarity
         blob = TextBlob(clean_post)
         sentiment = blob.sentiment.polarity
+        # Append the sentiment score to the list
         sentiment_list.append(sentiment)
-
         if debug:
             print(sentiment)
             print("----------")
-
     if debug:
         print(sentiment_list)
-
+    # Calculate the average sentiment score
     avg_sentiment = sum(sentiment_list) / len(sentiment_list)
-    print(f"Average Sentiment: {avg_sentiment}")
-
+    if debug:
+        print(f"Average Sentiment: {avg_sentiment}")
     return avg_sentiment
+
 
 def relay_trigger(relay_int, on_off, debug=False):
     '''
@@ -105,7 +114,8 @@ def relay_trigger(relay_int, on_off, debug=False):
 def update_sentiment_data():
     global current_image, current_sentiment, love_score, hate_score
 
-    current_sentiment = fb_post_sentiment(True)
+    # Fetch the current sentiment score from Facebook posts, pass True to enable debug output
+    current_sentiment = fb_post_sentiment()
 
     # Split the -1.0 to +1.0 range into thresholds
     if current_sentiment < 0:

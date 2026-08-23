@@ -5,6 +5,7 @@ y = 0
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
+import RPi.GPIO as GPIO
 import time
 from random import uniform
 from socialapis import Facebook
@@ -25,6 +26,7 @@ current_sentiment = 0.0
 love_score = 0
 hate_score = 0
 last_fetch_time = 0
+
 
 def fb_post_sentiment(debug=False):
     # Set up FB search terms
@@ -68,6 +70,38 @@ def fb_post_sentiment(debug=False):
 
     return avg_sentiment
 
+def relay_trigger(relay_int, on_off, debug=False):
+    '''
+    wire positive between A and C on relay
+    A to power, C to device
+
+    relay_int = 5, 6, 13, 16, 19, 20, 21, 26
+    on_off = on OR off
+    debug = True OR False, defaults to False
+    '''
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+
+    Relay = [5, 6, 13, 16, 19, 20, 21, 26]
+
+    if debug:
+        print("setup relays")
+    for i in range(len(Relay)):
+        GPIO.setup(Relay[i], GPIO.OUT)
+        GPIO.output(Relay[i], GPIO.HIGH)
+
+    if debug:
+        print("checking relay_int")
+    if relay_int in Relay:
+        if debug:
+            print("toggle relay")
+        if on_off == "on":
+            GPIO.output(relay_int, GPIO.LOW)
+        elif on_off == "off":
+            GPIO.output(relay_int, GPIO.HIGH)
+
+
 def update_sentiment_data():
     global current_image, current_sentiment, love_score, hate_score
 
@@ -75,15 +109,22 @@ def update_sentiment_data():
 
     # Split the -1.0 to +1.0 range into thresholds
     if current_sentiment < 0:
+        # set image to hate, increment hate score and switch off relay
         current_image = 'hate'
         hate_score += 1
+        relay_trigger(5, "off")
     elif current_sentiment > 0.05:
+        # set image to love, increment love score and switch on relay
         current_image = 'love'
         love_score += 1
+        relay_trigger(5, "on")
     elif 0 <= current_sentiment <= 0.05:
+        # set image to unsure, switch off relay
         current_image = 'unsure'
+        relay_trigger(5, "off")
     else:
         current_image = 'hate-circuit-bg'
+
 
 def draw():
     screen.clear()
@@ -120,6 +161,7 @@ def draw():
         scolor="black"
     )
 
+
 def update():
     global last_fetch_time
 
@@ -134,5 +176,6 @@ def update():
 
     if debug:
         print(f"Time to next fetch: {FETCH_INTERVAL - (current_time - last_fetch_time)}")
+
 
 pgzrun.go()

@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 
-def relay_toggle(relay_int, on_off, debug=False):
+def relay_trigger(relay_int, on_off, debug=False):
     '''
     wire positive between A and C on relay
     A to power, C to device
@@ -36,8 +36,8 @@ def relay_toggle(relay_int, on_off, debug=False):
 
 for i in range(5):
     print("On for 5 seconds")
-    relay_toggle(5, "on")
+    relay_trigger(5, "on")
     time.sleep(5)
     print("Off for 5 seconds")
-    relay_toggle(5, "off")
+    relay_trigger(5, "off")
     time.sleep(5)

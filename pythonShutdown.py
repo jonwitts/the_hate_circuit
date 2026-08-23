@@ -8,10 +8,7 @@
 from gpiozero import Button, LED
 from signal import pause
 from time import sleep
-from os import system
-
-button = Button(23, hold_time=3)
-led = LED(24)
+from subprocess import check_call
 
 
 def shutdown_pi():
@@ -20,8 +17,15 @@ def shutdown_pi():
         sleep(0.5)
         led.off()
         sleep(0.5)
-    system("sudo shutdown now -hP")
+    check_call(["sudo", "shutdown", "now", "-hP"])
 
 
+# Set up the button and LED
+button = Button(23, hold_time=3)
+led = LED(24)
+
+# Assign the shutdown function to the button's hold event
 button.when_held = shutdown_pi
+
+# Keep the script running to listen for button events
 pause()

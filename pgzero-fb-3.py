@@ -146,9 +146,10 @@ def draw():
         sentiment_text,
         center=(WIDTH // 2, 80),
         fontsize=70,
-        color="white",
+        color="black",
         shadow=(2, 2),
-        scolor="black"
+        scolor=(#858585),
+        fontname="Anton-Regular"
     )
 
     # Overlay love and hate scores
@@ -158,17 +159,19 @@ def draw():
         love_text,
         center=(WIDTH // 4, HEIGHT - 80),
         fontsize=60,
-        color="green",
+        color="black",
         shadow=(2, 2),
-        scolor="black"
+        scolor=(#858585),
+        fontname="Anton-Regular"
     )
     screen.draw.text(
         hate_text,
         center=(3 * WIDTH // 4, HEIGHT - 80),
         fontsize=60,
-        color="red",
+        color="black",
         shadow=(2, 2),
-        scolor="black"
+        scolor=(#858585),
+        fontname="Anton-Regular"
     )
 
 

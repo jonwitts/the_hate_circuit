@@ -144,11 +144,11 @@ def draw():
     sentiment_text = f"Current sentiment score: {current_sentiment:.3f}"
     screen.draw.text(
         sentiment_text,
-        center=(WIDTH // 2, 80),
+        center=(WIDTH // 2, 100),
         fontsize=70,
         color="black",
-        shadow=(2, 2),
-        scolor=("#858585"),
+        #shadow=(2, 2),
+        #scolor=("#858585"),
         fontname="anton-regular"
     )
 
@@ -157,20 +157,20 @@ def draw():
     hate_text = f"Hate: {hate_score}"
     screen.draw.text(
         love_text,
-        center=(WIDTH // 4, HEIGHT - 80),
+        center=(WIDTH // 4, HEIGHT - 100),
         fontsize=60,
         color="black",
-        shadow=(2, 2),
-        scolor=("#858585"),
+        #shadow=(2, 2),
+        #scolor=("#858585"),
         fontname="anton-regular"
     )
     screen.draw.text(
         hate_text,
-        center=(3 * WIDTH // 4, HEIGHT - 80),
+        center=(3 * WIDTH // 4, HEIGHT - 100),
         fontsize=60,
         color="black",
-        shadow=(2, 2),
-        scolor=("#858585"),
+        #shadow=(2, 2),
+        #scolor=("#858585"),
         fontname="anton-regular"
     )
 

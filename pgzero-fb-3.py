@@ -20,9 +20,10 @@ from textblob import TextBlob
 # not included in this repo for security reasons
 from socialapis_auth import fb_api_token
 
-# Match these dimensions to your display resolution
+# Set up window dimensions and title
 WIDTH = 1920
 HEIGHT = 1080
+TITLE = "The Hate Circuit"
 
 # Interval in seconds between API calls
 FETCH_INTERVAL = 300  # 5 minutes

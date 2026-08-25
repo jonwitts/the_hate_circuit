@@ -4,14 +4,15 @@
 #from doctest import debug
 import os
 
-#x = 0
-#y = 0
-#os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
+x = 0
+y = 0
+os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
 import RPi.GPIO as GPIO
 import time
-from random import uniform
+# used for testing with random sentiment values
+#from random import uniform
 from socialapis import Facebook
 from unidecode import unidecode
 from textblob import TextBlob
@@ -26,7 +27,7 @@ HEIGHT = 1080
 FULLSCREEN = True
 
 # Interval in seconds between API calls
-FETCH_INTERVAL = 300 # 5 minutes
+FETCH_INTERVAL = 300  # 5 minutes
 
 # Variables for sentiment image, initial sentiment, scores, and fetch time
 current_image = 'hate-circuit-bg'
@@ -42,7 +43,7 @@ def fb_post_sentiment(debug=False):
     result = fb.search_posts(
         "immigrant",
         start_time="2025-01-01",
-        location_id="113013485375759", # Kingston upon Hull
+        location_id="113013485375759",  # Kingston upon Hull
     )
 
     # filter FB results to post data
@@ -116,7 +117,8 @@ def relay_trigger(relay_int, on_off, debug=False):
 def update_sentiment_data():
     global current_image, current_sentiment, love_score, hate_score
 
-    # Fetch the current sentiment score from Facebook posts, pass True to enable debug output
+    # Fetch the current sentiment score from Facebook posts
+    # pass True to enable debug output
     current_sentiment = fb_post_sentiment()
 
     # Split the -1.0 to +1.0 range into thresholds
@@ -149,8 +151,6 @@ def draw():
         center=(WIDTH // 2, 100),
         fontsize=70,
         color="black",
-        #shadow=(2, 2),
-        #scolor=("#858585"),
         fontname="anton-regular"
     )
 
@@ -162,8 +162,6 @@ def draw():
         center=(WIDTH // 4, HEIGHT - 100),
         fontsize=60,
         color="black",
-        #shadow=(2, 2),
-        #scolor=("#858585"),
         fontname="anton-regular"
     )
     screen.draw.text(
@@ -171,8 +169,6 @@ def draw():
         center=(3 * WIDTH // 4, HEIGHT - 100),
         fontsize=60,
         color="black",
-        #shadow=(2, 2),
-        #scolor=("#858585"),
         fontname="anton-regular"
     )
 
@@ -190,7 +186,8 @@ def update():
         last_fetch_time = current_time
 
     if debug:
-        print(f"Time to next fetch: {FETCH_INTERVAL - (current_time - last_fetch_time)}")
+        time_to_fetch = FETCH_INTERVAL - (current_time - last_fetch_time)
+        print(f"Time to next fetch: {time_to_fetch}")
 
 
 pgzrun.go()

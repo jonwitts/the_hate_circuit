@@ -46,3 +46,7 @@ __pycache__/
 # Project specific files #
 ##########################
 socialapis_auth.py
+
+# GPIOZero files #
+##################
+.lgd-nfy0

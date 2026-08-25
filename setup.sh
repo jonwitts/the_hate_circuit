@@ -22,8 +22,8 @@ pip3 install textblob --break-system-packages
 pip3 install Unidecode --break-system-packages
 pip3 install RPi.GPIO --break-system-packages
 
-# copy and activate our systemd definitions
-echo "Copy and activate our systemd definitions..."
+# copy and activate our systemd and desktop definitions
+echo "Copy and activate our systemd and desktop definitions..."
 echo "=========================="
 # hateCircuit service
 mkdir -p /home/pi/.config/autostart
@@ -32,10 +32,16 @@ cp ./hateCircuit.desktop /home/pi/.config/autostart/hateCircuit.desktop
 cp ./pythonShutdown.service /lib/systemd/system/pythonShutdown.service
 chmod 644 /lib/systemd/system/pythonShutdown.service
 
-# reload and enable
+# reload and enable systemd services
 systemctl daemon-reload
-systemctl enable hateCircuit.service
 systemctl enable pythonShutdown.service
+
+# replace splash screen with our own
+echo "Replacing splash screen with our own..."
+echo "=========================="
+mv /usr/share/plymouth/themes/pix/splash.png /usr/share/plymouth/themes/pix/splash.png.bak
+cp ./splash.png /usr/share/plymouth/themes/pix/splash.png
+plymouth-set-default-theme --rebuild-initrd pix
 
 # done
 echo "Done. Rebooting now"

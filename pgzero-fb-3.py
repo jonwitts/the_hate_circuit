@@ -148,7 +148,7 @@ def draw():
         fontsize=70,
         color="black",
         shadow=(2, 2),
-        scolor=(#858585),
+        scolor=("#858585"),
         fontname="Anton-Regular"
     )
 
@@ -161,7 +161,7 @@ def draw():
         fontsize=60,
         color="black",
         shadow=(2, 2),
-        scolor=(#858585),
+        scolor=("#858585"),
         fontname="Anton-Regular"
     )
     screen.draw.text(
@@ -170,7 +170,7 @@ def draw():
         fontsize=60,
         color="black",
         shadow=(2, 2),
-        scolor=(#858585),
+        scolor=("#858585"),
         fontname="Anton-Regular"
     )
 

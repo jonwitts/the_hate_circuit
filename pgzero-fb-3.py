@@ -3,11 +3,12 @@
 # Force the Pygame window to open at a specific position on the screen
 #from doctest import debug
 import os
-
-x = 0
-y = 0
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
-os.environ['SDL_VIDEO_FULLSCREEN_DISPLAY'] = '0'
+# Forces SDL to render directly to the screen framebuffer without window borders
+os.environ['SDL_VIDEO_DRIVER'] = 'kmsdrm'
+#x = 0
+#y = 0
+#os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
+#os.environ['SDL_VIDEO_FULLSCREEN_DISPLAY'] = '0'
 
 import pgzrun
 import RPi.GPIO as GPIO

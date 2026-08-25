@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 # Force the Pygame window to open at a specific position on the screen
-from doctest import debug
+#from doctest import debug
 import os
 
-x = 0
-y = 0
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
+#x = 0
+#y = 0
+#os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
 import RPi.GPIO as GPIO
@@ -19,14 +19,16 @@ from textblob import TextBlob
 # not included in this repo for security reasons
 from socialapis_auth import fb_api_token
 
+# Setup the display dimensions and fullscreen mode
 # Match these dimensions to your display resolution
 WIDTH = 1920
 HEIGHT = 1080
+FULLSCREEN = True
 
 # Interval in seconds between API calls
 FETCH_INTERVAL = 300 # 5 minutes
 
-# State variables to store sentiment image, initial sentiment, scores, and fetch time
+# Variables for sentiment image, initial sentiment, scores, and fetch time
 current_image = 'hate-circuit-bg'
 current_sentiment = 0.0
 love_score = 0

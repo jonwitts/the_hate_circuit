@@ -141,7 +141,7 @@ def draw():
     screen.blit(current_image, (0, 0))
 
     # Overlay sentiment score on top of the image
-    sentiment_text = f"Current sentiment score: {current_sentiment:.3f}"
+    sentiment_text = f"CURRENT SENTIMENT SCORE: {current_sentiment:.3f}"
     screen.draw.text(
         sentiment_text,
         center=(WIDTH // 2, 100),
@@ -153,8 +153,8 @@ def draw():
     )
 
     # Overlay love and hate scores
-    love_text = f"Love: {love_score}"
-    hate_text = f"Hate: {hate_score}"
+    love_text = f"LOVE: {love_score}"
+    hate_text = f"HATE: {hate_score}"
     screen.draw.text(
         love_text,
         center=(WIDTH // 4, HEIGHT - 100),

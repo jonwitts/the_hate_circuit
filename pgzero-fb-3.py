@@ -31,7 +31,7 @@ current_image = 'hate-circuit-bg'
 current_sentiment = 0.0
 love_score = 0
 hate_score = 0
-last_fetch_time = 0
+last_fetch_time = time.time() - FETCH_INTERVAL + 10
 
 
 def fb_post_sentiment(debug=False):

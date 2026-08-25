@@ -26,8 +26,8 @@ pip3 install RPi.GPIO --break-system-packages
 echo "Copy and activate our systemd definitions..."
 echo "=========================="
 # hateCircuit service
-cp ./hateCircuit.service /lib/systemd/system/hateCircuit.service
-chmod 644 /lib/systemd/system/hateCircuit.service
+mkdir -p /home/pi/.config/autostart
+cp ./hateCircuit.desktop /home/pi/.config/autostart/hateCircuit.desktop
 # pythonShutdown service
 cp ./pythonShutdown.service /lib/systemd/system/pythonShutdown.service
 chmod 644 /lib/systemd/system/pythonShutdown.service

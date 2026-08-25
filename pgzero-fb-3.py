@@ -149,7 +149,7 @@ def draw():
         color="black",
         shadow=(2, 2),
         scolor=("#858585"),
-        fontname="Anton-Regular"
+        fontname="anton-regular"
     )
 
     # Overlay love and hate scores
@@ -162,7 +162,7 @@ def draw():
         color="black",
         shadow=(2, 2),
         scolor=("#858585"),
-        fontname="Anton-Regular"
+        fontname="anton-regular"
     )
     screen.draw.text(
         hate_text,
@@ -171,7 +171,7 @@ def draw():
         color="black",
         shadow=(2, 2),
         scolor=("#858585"),
-        fontname="Anton-Regular"
+        fontname="anton-regular"
     )
 
 

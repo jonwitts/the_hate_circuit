@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
 # Force the Pygame window to open at a specific position on the screen
-#from doctest import debug
-#import os
+import os
 
-#x = 0
-#y = 0
-#os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
+x = 0
+y = 0
+os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
 import pygame
@@ -34,12 +33,6 @@ current_sentiment = 0.0
 love_score = 0
 hate_score = 0
 last_fetch_time = time.time() - FETCH_INTERVAL + 10
-
-
-def set_fullscreen():
-    screen_surface = pygame.display.get_surface()
-    if screen_surface:
-        pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
 
 
 def fb_post_sentiment(debug=False):
@@ -194,7 +187,5 @@ def update():
         time_to_fetch = FETCH_INTERVAL - (current_time - last_fetch_time)
         print(f"Time to next fetch: {time_to_fetch}")
 
-
-set_fullscreen()
 
 pgzrun.go()

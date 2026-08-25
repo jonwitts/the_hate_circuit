@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/home/pi/Documents/hate-circuit/pgzero-fb.py
+ExecStart=/home/pi/Documents/hate-circuit/pgzero-hc.py
 
 [Install]
 WantedBy=multi-user.target

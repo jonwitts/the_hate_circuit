@@ -7,6 +7,7 @@ import os
 x = 0
 y = 0
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
+os.environ['SDL_VIDEO_FULLSCREEN_DISPLAY'] = '0'
 
 import pgzrun
 import RPi.GPIO as GPIO
@@ -20,11 +21,9 @@ from textblob import TextBlob
 # not included in this repo for security reasons
 from socialapis_auth import fb_api_token
 
-# Setup the display dimensions and fullscreen mode
 # Match these dimensions to your display resolution
 WIDTH = 1920
 HEIGHT = 1080
-FULLSCREEN = True
 
 # Interval in seconds between API calls
 FETCH_INTERVAL = 300  # 5 minutes

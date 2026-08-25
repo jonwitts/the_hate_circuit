@@ -2,11 +2,11 @@
 
 # Force the Pygame window to open at a specific position on the screen
 #from doctest import debug
-import os
+#import os
 
-x = 0
-y = 0
-os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
+#x = 0
+#y = 0
+#os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
 import pygame

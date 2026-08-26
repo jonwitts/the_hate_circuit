@@ -4,7 +4,7 @@
 import os
 
 x = 0
-y = 0
+y = -55 # account for taskbar and window title height
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun

@@ -43,6 +43,11 @@ mv /usr/share/plymouth/themes/pix/splash.png /usr/share/plymouth/themes/pix/spla
 cp ./splash.png /usr/share/plymouth/themes/pix/splash.png
 plymouth-set-default-theme --rebuild-initrd pix
 
+# stop task bar from loading - MUST be using X11
+echo "Stopping the taskbar from loading"
+echo "=========================="
+sed -i 's/@lxpanel-pi/#@lxpanel-pi/' /etc/xdg/lxsession/rpd-x/autostart
+
 # done
 echo "Done. Rebooting now"
 echo "=========================="

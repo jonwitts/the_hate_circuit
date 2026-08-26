@@ -126,12 +126,12 @@ def update_sentiment_data():
         current_image = 'hate'
         hate_score += 1
         relay_trigger(5, "off")
-    elif current_sentiment > 0.005:
+    elif current_sentiment > 0.009:
         # set image to love, increment love score and switch on relay
         current_image = 'love'
         love_score += 1
         relay_trigger(5, "on")
-    elif 0 <= current_sentiment <= 0.005:
+    elif 0 <= current_sentiment <= 0.009:
         # set image to unsure, switch off relay
         current_image = 'unsure'
         relay_trigger(5, "off")

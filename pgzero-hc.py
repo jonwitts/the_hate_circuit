@@ -42,6 +42,7 @@ def fb_post_sentiment(debug=False):
     result = fb.search_posts(
         "immigrant",
         start_time="2025-01-01",
+        recent_posts=True,
         location_id="113013485375759",  # Kingston upon Hull
     )
 

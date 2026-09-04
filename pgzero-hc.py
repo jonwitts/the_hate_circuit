@@ -7,6 +7,7 @@ x = 0
 y = -55  # account for taskbar and window title height
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
+import sys
 import pgzrun
 import pygame
 import RPi.GPIO as GPIO
@@ -28,20 +29,33 @@ TITLE = "The Hate Circuit"
 # Interval in seconds between API calls
 FETCH_INTERVAL = 300  # 5 minutes
 
+# Fallback path detection for Pygame Zero / pgzrun execution
+try:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))
+except Exception:
+    SCRIPT_DIR = os.getcwd()
+
 # Path for persistent storage of sentiment scores
-SCORES_FILE = os.path.join(os.path.dirname(__file__), 'scores.txt')
+SCORES_FILE = os.path.join(SCRIPT_DIR, 'scores.txt')
 
 
 def load_scores(debug=False):
-    '''Reads saved love and hate scores from a file, defaulting to (0, 0) if missing/corrupt.'''
+    '''Reads saved love and hate scores from a file, defaulting to (0, 0).'''
     if os.path.exists(SCORES_FILE):
         try:
             with open(SCORES_FILE, 'r') as f:
                 data = f.read().strip().split(',')
-                return int(data[0]), int(data[1])
+                love, hate = int(data[0]), int(data[1])
+                if debug:
+                    print(f"Successfully loaded scores from {SCORES_FILE}: Love={love}, Hate={hate}")
+                return love, hate
         except Exception as e:
             if debug:
                 print(f"Error reading scores file: {e}")
+                print(f"File exists at {SCORES_FILE} but failed to read ({e}). Resetting to 0, 0.")
+    else:
+        if debug:
+            print(f"Scores file {SCORES_FILE} does not exist. Initializing scores to 0, 0.")
     return 0, 0
 
 
@@ -50,9 +64,11 @@ def save_scores(love, hate, debug=False):
     try:
         with open(SCORES_FILE, 'w') as f:
             f.write(f"{love},{hate}")
+        if debug:
+            print(f"Successfully saved scores to {SCORES_FILE}: Love={love}, Hate={hate}")
     except Exception as e:
         if debug:
-            print(f"Error writing scores file: {e}")
+            print(f"Error writing scores to {SCORES_FILE}: {e}")
 
 
 # Variables for sentiment image, initial sentiment, scores, and fetch time

@@ -37,49 +37,70 @@ last_fetch_time = time.time() - FETCH_INTERVAL + 10
 
 
 def fb_post_sentiment(debug=False):
-    # Set up FB search terms
-    fb = Facebook(api_token=fb_api_token)
-    result = fb.search_posts(
-        "immigrant",
-        start_time="2025-01-01",
-        recent_posts=True,
-        location_id="113013485375759",  # Kingston upon Hull
-    )
+    try:
+        # Set up FB search terms
+        fb = Facebook(api_token=fb_api_token)
+        result = fb.search_posts(
+            "immigrant",
+            start_time="2025-01-01",
+            recent_posts=True,
+            location_id="113013485375759",  # Kingston upon Hull
+        )
 
-    # filter FB results to post data
-    fb_info = result["data"]["items"]
+        # Safely extract fb_info whether result is a dict or custom object
+        if isinstance(result, dict):
+            fb_info = result.get("data", {}).get("items", [])
+        else:
+            fb_info = result["data"]["items"]
 
-    # handle empty responses safely
-    if not fb_info:
+        # handle empty responses safely
+        if not fb_info:
+            return 0.0
+
+        # Empty list to store sentiment scores
+        sentiment_list = []
+
+        # Loop through each post, clean the text, and calculate sentiment
+        for entry in fb_info:
+            if isinstance(entry, dict):
+                raw_post = entry.get("basic_info", {}).get("post_text", "")
+            else:
+                raw_post = entry["basic_info"]["post_text"]
+
+            if not raw_post:
+                continue  # Skip if post text is empty
+
+            # Clean the post text by removing newlines and converting to ASCII
+            clean_post = unidecode(raw_post.replace("\n", " "))
+            if debug:
+                print(clean_post)
+                print("----------")
+
+            # Use TextBlob to calculate sentiment polarity
+            blob = TextBlob(clean_post)
+            # Append the sentiment score to the list
+            sentiment_list.append(blob.sentiment.polarity)
+            if debug:
+                print(blob.sentiment.polarity)
+                print("----------")
+
+        # Avoid DivisionByZero if no valid posts were found
+        if not sentiment_list:
+            return 0.0
+
+        if debug:
+            print(sentiment_list)
+
+        # Calculate the average sentiment score
+        avg_sentiment = sum(sentiment_list) / len(sentiment_list)
+        if debug:
+            print(f"Average Sentiment: {avg_sentiment}")
+        return avg_sentiment
+    except Exception as e:
+        if debug:
+            print(f"Error during sentiment fetch: {e}")
+        # Default to neutral sentiment if an error occurs
         return 0.0
-
-    # Empty list to store sentiment scores
-    sentiment_list = []
-
-    # Loop through each post, clean the text, and calculate sentiment
-    for entry in fb_info:
-        raw_post = entry["basic_info"]["post_text"]
-        # Clean the post text by removing newlines and converting to ASCII
-        clean_post = unidecode(raw_post.replace("\n", " "))
-        if debug:
-            print(clean_post)
-            print("----------")
-
-        # Use TextBlob to calculate sentiment polarity
-        blob = TextBlob(clean_post)
-        sentiment = blob.sentiment.polarity
-        # Append the sentiment score to the list
-        sentiment_list.append(sentiment)
-        if debug:
-            print(sentiment)
-            print("----------")
-    if debug:
-        print(sentiment_list)
-    # Calculate the average sentiment score
-    avg_sentiment = sum(sentiment_list) / len(sentiment_list)
-    if debug:
-        print(f"Average Sentiment: {avg_sentiment}")
-    return avg_sentiment
 
 
 def relay_trigger(relay_int, on_off, debug=False):

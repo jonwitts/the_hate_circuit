@@ -76,7 +76,7 @@ current_image = 'hate-circuit-bg'
 current_sentiment = 0.0
 last_fetch_time = time.time() - FETCH_INTERVAL + 10
 # Initialize scores from file on startup
-love_score, hate_score = load_scores(True)
+love_score, hate_score = load_scores()
 
 
 def fb_post_sentiment(debug=False):
@@ -210,7 +210,7 @@ def update_sentiment_data():
 
     # Save scores to file if either score incremented
     if score_updated:
-        save_scores(love_score, hate_score, True)
+        save_scores(love_score, hate_score)
 
 
 def draw():

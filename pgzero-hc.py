@@ -4,7 +4,7 @@
 import os
 
 x = 0
-y = -55 # account for taskbar and window title height
+y = -55  # account for taskbar and window title height
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{x},{y}'
 
 import pgzrun
@@ -12,7 +12,7 @@ import pygame
 import RPi.GPIO as GPIO
 import time
 # used for testing with random sentiment values
-#from random import uniform
+# from random import uniform
 from socialapis import Facebook
 from unidecode import unidecode
 from textblob import TextBlob
@@ -28,12 +28,39 @@ TITLE = "The Hate Circuit"
 # Interval in seconds between API calls
 FETCH_INTERVAL = 300  # 5 minutes
 
+# Path for persistent storage of sentiment scores
+SCORES_FILE = os.path.join(os.path.dirname(__file__), 'scores.txt')
+
+
+def load_scores(debug=False):
+    '''Reads saved love and hate scores from a file, defaulting to (0, 0) if missing/corrupt.'''
+    if os.path.exists(SCORES_FILE):
+        try:
+            with open(SCORES_FILE, 'r') as f:
+                data = f.read().strip().split(',')
+                return int(data[0]), int(data[1])
+        except Exception as e:
+            if debug:
+                print(f"Error reading scores file: {e}")
+    return 0, 0
+
+
+def save_scores(love, hate, debug=False):
+    '''Saves love and hate scores to a file.'''
+    try:
+        with open(SCORES_FILE, 'w') as f:
+            f.write(f"{love},{hate}")
+    except Exception as e:
+        if debug:
+            print(f"Error writing scores file: {e}")
+
+
 # Variables for sentiment image, initial sentiment, scores, and fetch time
 current_image = 'hate-circuit-bg'
 current_sentiment = 0.0
-love_score = 0
-hate_score = 0
 last_fetch_time = time.time() - FETCH_INTERVAL + 10
+# Initialize scores from file on startup
+love_score, hate_score = load_scores()
 
 
 def fb_post_sentiment(debug=False):
@@ -142,23 +169,32 @@ def update_sentiment_data():
     # pass True to enable debug output
     current_sentiment = fb_post_sentiment()
 
+    # Track if scores changed so we only write to disk when necessary
+    score_updated = False
+
     # Split the -1.0 to +1.0 range into thresholds
     if current_sentiment < 0:
         # set image to hate, increment hate score and switch off relay
         current_image = 'hate'
         hate_score += 1
         relay_trigger(5, "off")
+        score_updated = True
     elif current_sentiment > 0.009:
         # set image to love, increment love score and switch on relay
         current_image = 'love'
         love_score += 1
         relay_trigger(5, "on")
+        score_updated = True
     elif 0 <= current_sentiment <= 0.009:
         # set image to unsure, switch off relay
         current_image = 'unsure'
         relay_trigger(5, "off")
     else:
         current_image = 'hate-circuit-bg'
+
+    # Save scores to file if either score incremented
+    if score_updated:
+        save_scores(love_score, hate_score)
 
 
 def draw():
